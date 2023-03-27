@@ -87,14 +87,15 @@ namespace UmutLauncher
             var XMLConfig = new XmlDocument();
             XMLConfig.Load(@"../../XMLFile1.xml");
             var attrInst = XMLConfig.SelectSingleNode("/config").Attributes.Item(0);
-
+            string ver = "1.16.5";
             if (attrInst.Value == "false")
             {
-                await Task.Run(() => { Minecrafto.mcInstall("1.16.5"); });
+                await Task.Run(() => { Minecrafto.mcInstall(ver); });
                 attrInst.Value = "true";
                 XMLConfig.Save(@"../../XMLFile1.xml");
             }
-            await Task.Run(() => { Minecrafto.mcRun("1.16.5","BX0W"); });
+
+            await Task.Run(() => { Minecrafto.mcRun(ver,"BX0W"); });
 
 
         }
