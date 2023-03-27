@@ -22,11 +22,7 @@ namespace UmutLauncher
 
             Thread main = new Thread(() =>
             {
-                XmlDocument configxml = new XmlDocument();
-                configxml.Load(@"../../XMLFile1.xml");
-                XmlAttributeCollection config = configxml.SelectNodes("//*").Item(0).Attributes;
-
-                    Application.Run(new Form1());
+                Application.Run(new Form1());
             });
             
             main.Start();

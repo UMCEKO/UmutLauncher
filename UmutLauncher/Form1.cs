@@ -12,7 +12,6 @@ using CmlLib.Core;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Newtonsoft.Json;
 using Microsoft.Win32;
 using System.Net;
 using System.Net.Http;
@@ -34,16 +33,44 @@ namespace UmutLauncher
         {
             InitializeComponent();
         }
+        static private XmlDocument XMLConfig;
+        private XmlAttributeCollection attrList;
         private void Form1_Load(object sender, EventArgs a)
         {
+            
+            
+
+            if (File.Exists(@"Config.xml"))
+            {
+                XMLConfig = new XmlDocument();
+                try
+                {
+                    XMLConfig.Load(@"Config.xml");
+                }
+                catch
+                {
+                    File.Delete(@"Config.xml");
+                }
+            }
+            if (!File.Exists(@"Config.xml") || XMLConfig.SelectSingleNode("/config").Attributes.Count != 4)
+            {
+                File.Delete(@"Config.xml");
+                string XMLContent = "" +
+                    "<config \n" +
+                    "isInstalled = \"false\" \n" +
+                    "MaxRam = \"2048\" \n" +
+                    "MinRam = \"1024\" \n" +
+                    "JavaLoc = \"" + Minecrafto.GetJavaInstallationPath() + "\\bin\\javaw.exe\" /> ";
+                File.AppendAllText(@"Config.xml", XMLContent);
+                XMLConfig = new XmlDocument();
+                XMLConfig.Load(@"Config.xml");
+            }
+            
+            attrList = XMLConfig.SelectSingleNode("/config").Attributes;
         }
 
+        
 
-
-        public void setLabel(string val)
-        {
-            this.label1.Text = val;
-        }
 
         private void buttonMin_Click(object sender, EventArgs e)
         {
@@ -82,23 +109,73 @@ namespace UmutLauncher
         {
 
         }
+
         private async void RunMC_Click(object sender, EventArgs a)
         {
-            var XMLConfig = new XmlDocument();
-            XMLConfig.Load(@"../../XMLFile1.xml");
-            var attrInst = XMLConfig.SelectSingleNode("/config").Attributes.Item(0);
             string ver = "1.16.5";
-            if (attrInst.Value == "false")
+            if (attrList.Item(0).Value == "false")
             {
-                await Task.Run(() => { Minecrafto.mcInstall(ver); });
-                attrInst.Value = "true";
-                XMLConfig.Save(@"../../XMLFile1.xml");
+                await Task.Run(() => { Minecrafto.mcInstall(ver, this); });
+                attrList.Item(0).Value = "true";
+                XMLConfig.Save(@"Config.xml");
             }
 
-            await Task.Run(() => { Minecrafto.mcRun(ver,"BX0W"); });
-
-
+            Minecrafto.mcRun(ver, "BX0W", attrList, this);
+            if (this.Visible)
+            {
+                this.Hide();
+                this.notifyIcon1.Visible = true;
+            }
+            else
+            {
+                this.notifyIcon1.Visible = false;
+                this.Show();
+            }
         }
 
+        public void UpdateProgressBar(int percentage)
+        {
+            progressBar1.Value = percentage;
+        }
+
+        public void UpdateLabel(string msg)
+        {
+            label4.Text = msg;
+        }
+
+        private bool dragging = false;
+        private Point dragStart;
+
+        private void DragHandle_MouseDown(object sender, MouseEventArgs e)
+        {
+            dragging = true;
+            dragStart = e.Location;
+        }
+
+        private void DragHandle_MouseUp(object sender, MouseEventArgs e)
+        {
+            dragging = false;
+        }
+
+        private void DragHandle_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (dragging)
+            {
+                Point newLocation = this.Location;
+                newLocation.X += e.Location.X - dragStart.X;
+                newLocation.Y += e.Location.Y - dragStart.Y;
+                this.Location = newLocation;
+            }
+        }
+
+        private void progressBar1_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
