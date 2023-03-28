@@ -20,12 +20,9 @@ namespace UmutLauncher
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Thread main = new Thread(() =>
-            {
-                Application.Run(new Form1());
-            });
-            
-            main.Start();
+
+            Application.Run(new Form1());
+
             
         }
 
