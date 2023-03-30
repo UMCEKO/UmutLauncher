@@ -67,8 +67,8 @@ namespace UmutLauncher
             this.ButtonPlay = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.KCButton = new System.Windows.Forms.Button();
-            this.panel12 = new System.Windows.Forms.Panel();
             this.SuvariButton = new System.Windows.Forms.Button();
+            this.panel12 = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.DragHandle.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -102,7 +102,7 @@ namespace UmutLauncher
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.progressBar1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 530);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(10);
@@ -127,6 +127,7 @@ namespace UmutLauncher
             // 
             this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.progressBar1.Location = new System.Drawing.Point(10, 30);
+            this.progressBar1.MarqueeAnimationSpeed = 0;
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(940, 30);
             this.progressBar1.TabIndex = 0;
@@ -283,10 +284,10 @@ namespace UmutLauncher
             this.panel3.Controls.Add(this.panel4);
             this.panel3.Controls.Add(this.panel13);
             this.panel3.Controls.Add(this.panel8);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(0, 35);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(0, 45);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(960, 495);
+            this.panel3.Size = new System.Drawing.Size(960, 485);
             this.panel3.TabIndex = 8;
             // 
             // panel4
@@ -297,7 +298,7 @@ namespace UmutLauncher
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(10, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(736, 495);
+            this.panel4.Size = new System.Drawing.Size(736, 485);
             this.panel4.TabIndex = 11;
             this.panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.panel4_Paint_1);
             // 
@@ -307,9 +308,8 @@ namespace UmutLauncher
             this.chromiumWebBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chromiumWebBrowser1.Location = new System.Drawing.Point(0, 0);
             this.chromiumWebBrowser1.Name = "chromiumWebBrowser1";
-            this.chromiumWebBrowser1.Size = new System.Drawing.Size(736, 495);
+            this.chromiumWebBrowser1.Size = new System.Drawing.Size(736, 485);
             this.chromiumWebBrowser1.TabIndex = 1;
-            this.chromiumWebBrowser1.LoadUrlAsync("https://www.google.com");
             this.chromiumWebBrowser1.LoadingStateChanged += new System.EventHandler<CefSharp.LoadingStateChangedEventArgs>(this.chromiumWebBrowser1_LoadingStateChanged);
             // 
             // pictureBox1
@@ -317,7 +317,7 @@ namespace UmutLauncher
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(736, 495);
+            this.pictureBox1.Size = new System.Drawing.Size(736, 485);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
@@ -328,7 +328,7 @@ namespace UmutLauncher
             this.panel13.Location = new System.Drawing.Point(0, 0);
             this.panel13.Name = "panel13";
             this.panel13.Padding = new System.Windows.Forms.Padding(10);
-            this.panel13.Size = new System.Drawing.Size(10, 495);
+            this.panel13.Size = new System.Drawing.Size(10, 485);
             this.panel13.TabIndex = 10;
             // 
             // panel8
@@ -339,7 +339,7 @@ namespace UmutLauncher
             this.panel8.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel8.Location = new System.Drawing.Point(746, 0);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(214, 495);
+            this.panel8.Size = new System.Drawing.Size(214, 485);
             this.panel8.TabIndex = 8;
             this.panel8.Paint += new System.Windows.Forms.PaintEventHandler(this.panel8_Paint);
             // 
@@ -352,8 +352,8 @@ namespace UmutLauncher
             this.panel5.Controls.Add(this.button1);
             this.panel5.Controls.Add(this.panel9);
             this.panel5.Controls.Add(this.ButtonPlay);
-            this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel5.Location = new System.Drawing.Point(0, 418);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel5.Location = new System.Drawing.Point(0, 407);
             this.panel5.Name = "panel5";
             this.panel5.Padding = new System.Windows.Forms.Padding(10);
             this.panel5.Size = new System.Drawing.Size(214, 78);
@@ -440,52 +440,64 @@ namespace UmutLauncher
             this.panel2.AutoSize = true;
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.panel2.Controls.Add(this.KCButton);
-            this.panel2.Controls.Add(this.panel12);
             this.panel2.Controls.Add(this.SuvariButton);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Padding = new System.Windows.Forms.Padding(10);
-            this.panel2.Size = new System.Drawing.Size(214, 418);
+            this.panel2.Size = new System.Drawing.Size(214, 160);
             this.panel2.TabIndex = 9;
             // 
             // KCButton
             // 
-            this.KCButton.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.KCButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.KCButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.KCButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.KCButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.KCButton.Image = global::UmutLauncher.Properties.resources.KC;
-            this.KCButton.Location = new System.Drawing.Point(10, 214);
+            this.KCButton.Font = new System.Drawing.Font("Rose Knight", 16F);
+            this.KCButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.KCButton.Image = global::UmutLauncher.Properties.resources.kcicon;
+            this.KCButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.KCButton.Location = new System.Drawing.Point(0, 80);
             this.KCButton.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
             this.KCButton.Name = "KCButton";
-            this.KCButton.Size = new System.Drawing.Size(194, 194);
+            this.KCButton.Padding = new System.Windows.Forms.Padding(5);
+            this.KCButton.Size = new System.Drawing.Size(214, 80);
             this.KCButton.TabIndex = 10;
+            this.KCButton.Text = "  KnightCraft";
+            this.KCButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.KCButton.UseVisualStyleBackColor = false;
             this.KCButton.Click += new System.EventHandler(this.KC_Click);
             // 
-            // panel12
-            // 
-            this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel12.Location = new System.Drawing.Point(10, 204);
-            this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(194, 10);
-            this.panel12.TabIndex = 14;
-            // 
             // SuvariButton
             // 
-            this.SuvariButton.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.SuvariButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.SuvariButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.SuvariButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.SuvariButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SuvariButton.Image = global::UmutLauncher.Properties.resources.Suvari;
-            this.SuvariButton.Location = new System.Drawing.Point(10, 10);
+            this.SuvariButton.Font = new System.Drawing.Font("Rose Knight", 16F);
+            this.SuvariButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.SuvariButton.Image = global::UmutLauncher.Properties.resources.suvariicon;
+            this.SuvariButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.SuvariButton.Location = new System.Drawing.Point(0, 0);
             this.SuvariButton.Margin = new System.Windows.Forms.Padding(10, 0, 10, 10);
             this.SuvariButton.Name = "SuvariButton";
-            this.SuvariButton.Size = new System.Drawing.Size(194, 194);
+            this.SuvariButton.Padding = new System.Windows.Forms.Padding(10);
+            this.SuvariButton.Size = new System.Drawing.Size(214, 80);
             this.SuvariButton.TabIndex = 9;
+            this.SuvariButton.Text = "  Suvari";
+            this.SuvariButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.SuvariButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.SuvariButton.UseVisualStyleBackColor = false;
             this.SuvariButton.Click += new System.EventHandler(this.Suvari_Click);
+            // 
+            // panel12
+            // 
+            this.panel12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel12.Location = new System.Drawing.Point(0, 35);
+            this.panel12.Name = "panel12";
+            this.panel12.Size = new System.Drawing.Size(960, 10);
+            this.panel12.TabIndex = 9;
             // 
             // Launcher
             // 
@@ -495,9 +507,10 @@ namespace UmutLauncher
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.BackgroundImage = global::UmutLauncher.Properties.resources.rsz_3intro_2;
             this.ClientSize = new System.Drawing.Size(960, 600);
-            this.Controls.Add(this.panel3);
-            this.Controls.Add(this.DragHandle);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panel3);
+            this.Controls.Add(this.panel12);
+            this.Controls.Add(this.DragHandle);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1920, 1080);
@@ -556,13 +569,13 @@ namespace UmutLauncher
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel9;
         private System.Windows.Forms.Button ButtonPlay;
-        private System.Windows.Forms.Panel panel12;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Panel panel13;
         private System.Windows.Forms.Label label4;
         private PictureBox pictureBox1;
         private CefSharp.WinForms.ChromiumWebBrowser chromiumWebBrowser1;
+        private Panel panel12;
     }
 
 }

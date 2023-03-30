@@ -31,6 +31,7 @@ namespace UmutLauncher
 
         public static void mcRun(LaunchInformation InfoL, XmlDocument configXML, Launcher form)
         {
+            form.Invoke(new Action(() => form.UpdateProgressBar(0)));
             var session = MSession.GetOfflineSession(configXML.SelectSingleNode("//name").InnerText);
             var MCPath = new MinecraftPath(@"instances/" + InfoL.selectedProfile + "/");
             var Launcher = new CMLauncher(MCPath);
@@ -43,6 +44,7 @@ namespace UmutLauncher
             {
                 McVersion = Launcher.GetVersion(InfoL.vanillaVersion);
             }
+            form.Invoke(new Action(() => form.UpdateProgressBar(20)));
             Launcher.FileChanged += (e) =>
             {
                 Console.WriteLine("[{0}] {1} - {2}/{3}", e.FileKind.ToString(), e.FileName, e.ProgressedFileCount, e.TotalFileCount);
@@ -53,7 +55,7 @@ namespace UmutLauncher
                 Console.WriteLine("{0}%", e.ProgressPercentage);
                 form.Invoke(new Action(() => form.UpdateProgressBar(e.ProgressPercentage)));
             };
-
+            form.Invoke(new Action(() => form.UpdateProgressBar(40)));
 
             var Options = new MLaunchOption
             {
@@ -65,7 +67,7 @@ namespace UmutLauncher
                 Path = MCPath,
                 StartVersion = McVersion
             };
-
+            form.Invoke(new Action(() => form.UpdateProgressBar(60)));
             if (configXML.SelectSingleNode("//javaPath").InnerText == "")
             {
                 Options.JavaPath = Minecrafto.GetJavaInstallationPath() + @"\bin\javaw.exe";
@@ -74,7 +76,7 @@ namespace UmutLauncher
             {
                 Options.JavaPath = configXML.SelectSingleNode("//javaPath").InnerText + @"\bin\javaw.exe";
             }
-
+            form.Invoke(new Action(() => form.UpdateProgressBar(80)));
             if ((configXML.SelectSingleNode("//javaArgs").InnerText.Length == 0) && isValidJVM(configXML.SelectSingleNode("//javaArgs").InnerText))
             {
                 string[] JVMParsed = parseJVM(configXML.SelectSingleNode("//javaArgs").InnerText);
@@ -87,7 +89,7 @@ namespace UmutLauncher
 
             
             var inst = Launcher.CreateProcess(McVersion, Options, false);
-            
+            form.Invoke(new Action(() => form.UpdateProgressBar(100)));
             inst.Start();
 
             //Launcher.Launch(McVersion.Id, Options);

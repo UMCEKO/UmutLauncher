@@ -183,6 +183,15 @@
   <ItemGroup>
     <None Include="Resources\rsz_3intro_2.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\suvariicon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\kcicon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\planet_omega-wallpaper-960x600.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

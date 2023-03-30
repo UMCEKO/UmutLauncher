@@ -93,9 +93,29 @@ namespace UmutLauncher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap kcicon {
+            get {
+                object obj = ResourceManager.GetObject("kcicon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Pictogrammers_Material_Play_48 {
             get {
                 object obj = ResourceManager.GetObject("Pictogrammers-Material-Play.48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap planet_omega_wallpaper_960x600 {
+            get {
+                object obj = ResourceManager.GetObject("planet_omega-wallpaper-960x600", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -166,6 +186,16 @@ namespace UmutLauncher.Properties {
         internal static System.Drawing.Bitmap Suvari {
             get {
                 object obj = ResourceManager.GetObject("Suvari", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap suvariicon {
+            get {
+                object obj = ResourceManager.GetObject("suvariicon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

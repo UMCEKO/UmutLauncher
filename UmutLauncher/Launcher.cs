@@ -43,7 +43,7 @@ namespace UmutLauncher
 
         private void Form1_Load(object sender, EventArgs a)
         {
-            this.chromiumWebBrowser1.LoadUrl("https://www.google.com");
+            this.chromiumWebBrowser1.LoadUrl("https://umceko.github.io");
             ChangeLoadingBar();
             label1.Font = myFont;
             configForm = new Config(this, true);
