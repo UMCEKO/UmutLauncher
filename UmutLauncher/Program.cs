@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
+using System.IO;
 using System.Windows.Forms;
-using System.Xml;
-using CmlLib;
 
 namespace UmutLauncher
 {
@@ -21,13 +16,12 @@ namespace UmutLauncher
             Application.SetCompatibleTextRenderingDefault(false);
 
 
-            Application.Run(new Form1());
 
-            
+
+            Application.Run(new Launcher());
         }
 
-
-
     }
+
 
 }

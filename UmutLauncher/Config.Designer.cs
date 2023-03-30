@@ -1,7 +1,7 @@
 ﻿
 namespace UmutLauncher
 {
-    partial class ConfigForm
+    partial class Config
     {
         /// <summary>
         /// Required designer variable.
@@ -44,6 +44,7 @@ namespace UmutLauncher
             this.label7 = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -69,17 +70,18 @@ namespace UmutLauncher
             // javaPathBox
             // 
             this.javaPathBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.javaPathBox.Location = new System.Drawing.Point(10, 243);
+            this.javaPathBox.Location = new System.Drawing.Point(10, 287);
             this.javaPathBox.Name = "javaPathBox";
             this.javaPathBox.Size = new System.Drawing.Size(297, 20);
             this.javaPathBox.TabIndex = 3;
+            this.javaPathBox.TextChanged += new System.EventHandler(this.javaPathBox_TextChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Dock = System.Windows.Forms.DockStyle.Top;
             this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(10, 220);
+            this.label2.Location = new System.Drawing.Point(10, 264);
             this.label2.Name = "label2";
             this.label2.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.label2.Size = new System.Drawing.Size(55, 23);
@@ -93,6 +95,7 @@ namespace UmutLauncher
             this.MaxRamBox.Name = "MaxRamBox";
             this.MaxRamBox.Size = new System.Drawing.Size(297, 20);
             this.MaxRamBox.TabIndex = 5;
+            this.MaxRamBox.TextChanged += new System.EventHandler(this.UpdateMinRam);
             // 
             // label3
             // 
@@ -109,7 +112,7 @@ namespace UmutLauncher
             // MinRamBox
             // 
             this.MinRamBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.MinRamBox.Location = new System.Drawing.Point(10, 157);
+            this.MinRamBox.Location = new System.Drawing.Point(10, 201);
             this.MinRamBox.Name = "MinRamBox";
             this.MinRamBox.Size = new System.Drawing.Size(297, 20);
             this.MinRamBox.TabIndex = 7;
@@ -119,7 +122,7 @@ namespace UmutLauncher
             this.label4.AutoSize = true;
             this.label4.Dock = System.Windows.Forms.DockStyle.Top;
             this.label4.ForeColor = System.Drawing.SystemColors.Control;
-            this.label4.Location = new System.Drawing.Point(10, 134);
+            this.label4.Location = new System.Drawing.Point(10, 178);
             this.label4.Name = "label4";
             this.label4.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.label4.Size = new System.Drawing.Size(244, 23);
@@ -139,17 +142,18 @@ namespace UmutLauncher
             // JavaArgBox
             // 
             this.JavaArgBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.JavaArgBox.Location = new System.Drawing.Point(10, 200);
+            this.JavaArgBox.Location = new System.Drawing.Point(10, 244);
             this.JavaArgBox.Name = "JavaArgBox";
             this.JavaArgBox.Size = new System.Drawing.Size(297, 20);
             this.JavaArgBox.TabIndex = 10;
+            this.JavaArgBox.TextChanged += new System.EventHandler(this.UnFlash);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Dock = System.Windows.Forms.DockStyle.Top;
             this.label5.ForeColor = System.Drawing.SystemColors.Control;
-            this.label5.Location = new System.Drawing.Point(10, 177);
+            this.label5.Location = new System.Drawing.Point(10, 221);
             this.label5.Name = "label5";
             this.label5.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.label5.Size = new System.Drawing.Size(88, 23);
@@ -179,13 +183,16 @@ namespace UmutLauncher
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
+            this.checkBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.checkBox1.ForeColor = System.Drawing.Color.Snow;
-            this.checkBox1.Location = new System.Drawing.Point(10, 282);
+            this.checkBox1.Location = new System.Drawing.Point(10, 156);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(80, 17);
+            this.checkBox1.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.checkBox1.Size = new System.Drawing.Size(297, 22);
             this.checkBox1.TabIndex = 14;
-            this.checkBox1.Text = "checkBox1";
+            this.checkBox1.Text = "Gelişmiş Ayarlar";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.advChanged);
             // 
             // button1
             // 
@@ -197,14 +204,26 @@ namespace UmutLauncher
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.oyunklasoru);
             // 
-            // ConfigForm
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.checkBox2.ForeColor = System.Drawing.Color.Snow;
+            this.checkBox2.Location = new System.Drawing.Point(10, 134);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.checkBox2.Size = new System.Drawing.Size(297, 22);
+            this.checkBox2.TabIndex = 16;
+            this.checkBox2.Text = "Tam Ekran";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // Config
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(317, 450);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.javaPathBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.JavaArgBox);
@@ -212,6 +231,8 @@ namespace UmutLauncher
             this.Controls.Add(this.KaydetButton);
             this.Controls.Add(this.MinRamBox);
             this.Controls.Add(this.label4);
+            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.MaxRamBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.KCPassBox);
@@ -221,7 +242,7 @@ namespace UmutLauncher
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "ConfigForm";
+            this.Name = "Config";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
@@ -254,5 +275,6 @@ namespace UmutLauncher
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.CheckBox checkBox2;
     }
 }

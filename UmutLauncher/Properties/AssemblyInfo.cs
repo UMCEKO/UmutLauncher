@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("UmutLauncher")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A Minecraft Launcher made by UMCEKO")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("UMCEKO")]
 [assembly: AssemblyProduct("UmutLauncher")]
 [assembly: AssemblyCopyright("Copyright ©  2023")]
 [assembly: AssemblyTrademark("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("937d31ad-2fe2-409c-8bcb-fcc944d09800")]
+[assembly: Guid("986cd1ad-2fe2-409c-8bcb-fcc945709800")]
 
 // Version information for an assembly consists of the following four values:
 //

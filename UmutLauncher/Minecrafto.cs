@@ -1,26 +1,16 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.Win32;
 using System.Xml;
 using System.Net;
-using System.Net.Http;
 using System.IO;
-using System.Threading;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using CmlLib;
 using CmlLib.Core;
 using CmlLib.Core.Version;
-using CmlLib.Core.VersionLoader;
-using CmlLib.Core.Installer;
-using CmlLib.Core.Downloader;
-using CmlLib.Core.Files;
 using CmlLib.Core.Auth;
-using CmlLib.Core.Auth.Microsoft;
 using ICSharpCode.SharpZipLib.Zip;
-using ICSharpCode.SharpZipLib;
-
+using Microsoft.VisualBasic.FileIO;
 
 namespace UmutLauncher
 {
@@ -39,20 +29,19 @@ namespace UmutLauncher
             }
         }
 
-        public static void mcRun(LaunchInformation InfoL, XmlAttributeCollection attrList, Form1 form)
+        public static void mcRun(LaunchInformation InfoL, XmlDocument configXML, Launcher form)
         {
-            Console.WriteLine(attrList.Item(0).Value);
-            var session = MSession.GetOfflineSession(attrList.Item(0).Value);
+            var session = MSession.GetOfflineSession(configXML.SelectSingleNode("//name").InnerText);
             var MCPath = new MinecraftPath(@"instances/" + InfoL.selectedProfile + "/");
             var Launcher = new CMLauncher(MCPath);
             MVersion McVersion;
             if (InfoL.isForge)
             {
-                McVersion = Launcher.GetVersion(InfoL.forgeVersion);
+                McVersion = Launcher.GetVersion(InfoL.profileName);
             }
             else
             {
-                McVersion = Launcher.GetVersion(InfoL.mcVersion);
+                McVersion = Launcher.GetVersion(InfoL.vanillaVersion);
             }
             Launcher.FileChanged += (e) =>
             {
@@ -64,27 +53,31 @@ namespace UmutLauncher
                 Console.WriteLine("{0}%", e.ProgressPercentage);
                 form.Invoke(new Action(() => form.UpdateProgressBar(e.ProgressPercentage)));
             };
-            Console.WriteLine(attrList.Item(3).Value);
-
 
 
             var Options = new MLaunchOption
             {
-                FullScreen = false,
-                MinimumRamMb = Int32.Parse(attrList.Item(2).Value),
-                MaximumRamMb = Int32.Parse(attrList.Item(1).Value),
-                ScreenHeight = 1080,
-                ScreenWidth = 1920,
-                JavaPath = attrList.Item(3).Value,
+                FullScreen = bool.Parse(configXML.SelectSingleNode("//fullscreen").InnerText),
+                MinimumRamMb = Int32.Parse(configXML.SelectSingleNode("//minRam").InnerText),
+                MaximumRamMb = Int32.Parse(configXML.SelectSingleNode("//maxRam").InnerText),
                 ServerIp = InfoL.serverIP,
                 Session = session,
                 Path = MCPath,
                 StartVersion = McVersion
             };
 
-            if (isValidJVM(attrList.Item(4).Value))
+            if (configXML.SelectSingleNode("//javaPath").InnerText == "")
             {
-                string[] JVMParsed = parseJVM(attrList.Item(4).Value);
+                Options.JavaPath = Minecrafto.GetJavaInstallationPath() + @"\bin\javaw.exe";
+            }
+            else
+            {
+                Options.JavaPath = configXML.SelectSingleNode("//javaPath").InnerText + @"\bin\javaw.exe";
+            }
+
+            if ((configXML.SelectSingleNode("//javaArgs").InnerText.Length == 0) && isValidJVM(configXML.SelectSingleNode("//javaArgs").InnerText))
+            {
+                string[] JVMParsed = parseJVM(configXML.SelectSingleNode("//javaArgs").InnerText);
                 Options.JVMArguments = JVMParsed;
                 for (int i = 0; Options.JVMArguments.Length > i; i++)
                 {
@@ -100,81 +93,79 @@ namespace UmutLauncher
             //Launcher.Launch(McVersion.Id, Options);
         }
 
+        public static void addValue(string xmlPath, string elementName, string elementValue)
+        {
+            var xmldoc = new XmlDocument();
+            xmldoc.Load(xmlPath);
+            var newElement = xmldoc.CreateElement(elementName);
+            newElement.InnerText = elementValue;
+            xmldoc.DocumentElement.AppendChild(newElement);
+            xmldoc.Save(xmlPath);
+            return;
+        }
 
-        public async static void mcInstall(LaunchInformation InfoL , Form1 passedForm)
+
+        public static void mcInstall(LaunchInformation InfoL , Launcher passedForm)
         {
 
-                var MCPath = new MinecraftPath(@"instances/" + InfoL.selectedProfile + "/");
-                var Launcher = new CMLauncher(MCPath);
-                Launcher.FileChanged += (e) =>
-                {
-                    Console.WriteLine("[{0}] {1} - {2}/{3}", e.FileKind.ToString(), e.FileName, e.ProgressedFileCount, e.TotalFileCount);
-                    passedForm.Invoke(new Action(() => passedForm.UpdateLabel("[" + e.FileKind.ToString() + "] %" + ((e.ProgressedFileCount * 100) / e.TotalFileCount) + " Şuan indirilen dosya:" + e.FileName)));
-                };
-                Launcher.ProgressChanged += (s, e) =>
-                {
-                    Form1 myForm = new Form1();
-                    passedForm.Invoke(new Action(() => passedForm.UpdateProgressBar(e.ProgressPercentage)));
-                };
-                var McVersion = Launcher.GetVersion(InfoL.mcVersion);
-                Launcher.CheckAndDownload(McVersion);
+            var MCPath = new MinecraftPath(@"instances/" + InfoL.selectedProfile + "/");
+            var Launcher = new CMLauncher(MCPath);
+            Launcher.FileChanged += (e) =>
+            {
+                Console.WriteLine("[{0}] {1} - {2}/{3}", e.FileKind.ToString(), e.FileName, e.ProgressedFileCount, e.TotalFileCount);
+                passedForm.Invoke(new Action(() => passedForm.UpdateLabel("[" + e.FileKind.ToString() + "] %" + ((e.ProgressedFileCount * 100) / e.TotalFileCount) + " Şuan indirilen dosya:" + e.FileName)));
+            };
+            Launcher.ProgressChanged += (s, e) =>
+            {
+                Launcher myForm = new Launcher();
+                passedForm.Invoke(new Action(() => passedForm.UpdateProgressBar(e.ProgressPercentage)));
+            };
+            var McVersion = Launcher.GetVersion(InfoL.vanillaVersion);
+            Launcher.CheckAndDownload(McVersion);
+
+
+            string ZipDir = @"instances/zips/lmao.zip";
+            string TempDir = @"instances/temp";
+
+            //var ahk = new ProcessStartInfo();
+            //ahk.Arguments = 
+            //    ZipDir + " " + 
+            //    TempDir + " " + 
+            //    DestDir + " " + 
+            //    InfoL.isForge + " " + 
+            //    InfoL.forgeLink + " " + 
+            //    InfoL.isModsExternal + " " + 
+            //    InfoL.externalModsLink;
+            //ahk.FileName = "forgeInst.exe";
+            //Process process = Process.Start(ahk);
+            //process.WaitForExit();
 
             if (InfoL.isForge)
             {
-                passedForm.Invoke(new Action(() => passedForm.UpdateLabel("[Forge] Forge Alınıyor")));
-                await Task.Run(() =>
+                Directory.CreateDirectory(ZipDir + @"\..");
+                using (var client = new WebClient())
                 {
-                    using (WebClient wc = new WebClient())
-                    {
-                        wc.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
-                        {
-                            passedForm.Invoke(new Action(() => passedForm.UpdateProgressBar(e.ProgressPercentage)));
-                        };
-                        wc.DownloadFile(new System.Uri(InfoL.forgeLink), @"instances/forgeraw.zip");
-                    };
-                });
-                string TempDir = @"instances/temp/unzippedforge";
-                string ZipDir = @"instances/zips/forge.zip";
-                string DestDir = @"instances/KnightCraft";
-                Directory.CreateDirectory(TempDir + "/..");
-                Directory.CreateDirectory(ZipDir + "/..");
-                var fastZip = new FastZip
-                {
-                    CreateEmptyDirectories = true
-                };
-                fastZip.ExtractZip(ZipDir,TempDir,null);
-                File.Delete(ZipDir);
-
-                MoveDirectory(TempDir, DestDir);
-                if (InfoL.isModsExternal)
-                {
-                    TempDir = @"instances/temp/unzippedmods";
-                    ZipDir = @"instances/zips/mods.zip";
-                    passedForm.Invoke(new Action(() => passedForm.UpdateLabel("[Modlar] Modlar Alınıyor")));
-                    await Task.Run(() =>
-                    {
-                        using (WebClient wc = new WebClient())
-                        {
-                            wc.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
-                            {
-                                passedForm.Invoke(new Action(() => passedForm.UpdateProgressBar(e.ProgressPercentage)));
-                            };
-                            wc.DownloadFile(new System.Uri(InfoL.externalModsLink), ZipDir);
-                        };
-                        fastZip.ExtractZip(ZipDir, TempDir, null);
-                        File.Delete(ZipDir);
-
-                        MoveDirectory(TempDir, DestDir);
-                    });
-                    fastZip.ExtractZip(ZipDir, TempDir, null);
+                    client.DownloadFile(InfoL.externalVerLink, ZipDir);
                 }
+
+                FastZip kek = new FastZip();
+                kek.ExtractZip(ZipDir, TempDir, null);
+                File.Delete(ZipDir);
+                FileSystem.CopyDirectory(TempDir, MCPath.BasePath , true);
+
             }
         }
 
         public static bool isValidJVM(string arg)
         {
+            if (arg.Length == 0)
+            {
+                return true;
+            }
             if (arg[0] == ' ' || arg[arg.Length - 1] == ' ')
+            {
                 return false;
+            }
             for(int i = 1; i<arg.Length; i++)
             {
                 if(arg[i-1]==arg[i] && arg[i] == ' ')
@@ -183,11 +174,10 @@ namespace UmutLauncher
                 } 
             }
 
-
             return true;
         }
 
-        public static string[] parseJVM(string arg)
+        private static string[] parseJVM(string arg)
         {
             string[] JavaArgs = {"false"};
 
@@ -226,30 +216,25 @@ namespace UmutLauncher
             return JavaArgs;
         }
 
-        public static void MoveDirectory(string source, string target)
+        public static XmlDocument constructConfigPairs(string[][] configPairs,string rootElementName)
         {
-            var stack = new Stack<Folders>();
-            stack.Push(new Folders(source, target));
+            var newXMLDoc = new XmlDocument();
+            newXMLDoc.CreateElement(rootElementName);
+            XmlNode root = newXMLDoc.CreateElement(rootElementName);
 
-            while (stack.Count > 0)
+            XmlNode childNode;
+            for (int i = 0; i < configPairs.Length; i++)
             {
-                var folders = stack.Pop();
-                Directory.CreateDirectory(folders.Target);
-                foreach (var file in Directory.GetFiles(folders.Source, "*.*"))
-                {
-                    string targetFile = Path.Combine(folders.Target, Path.GetFileName(file));
-                    if (File.Exists(targetFile)) File.Delete(targetFile);
-                    File.Move(file, targetFile);
-                }
-
-                foreach (var folder in Directory.GetDirectories(folders.Source))
-                {
-                    stack.Push(new Folders(folder, Path.Combine(folders.Target, Path.GetFileName(folder))));
-                }
+                childNode = newXMLDoc.CreateElement(configPairs[i][0]);
+                childNode.InnerText = configPairs[i][1];
+                root.AppendChild(childNode);
             }
-            Directory.Delete(source, true);
+
+            newXMLDoc.AppendChild(root);
+            return newXMLDoc;
         }
-        public class Folders
+
+        private class Folders
         {
             public string Source { get; private set; }
             public string Target { get; private set; }
@@ -261,28 +246,48 @@ namespace UmutLauncher
             }
         }
 
+
     }
+
 
     public class LaunchInformation
     {
         public string selectedProfile = "null";
-        public bool isForge = false;
-        public string mcVersion = "1.16.5";
-        public bool isModsExternal = false;
+        public string vanillaVersion = "1.16.5";
         public string externalModsLink; 
-        public string forgeLink;
+        public string externalVerLink;
         public string serverIP;
-        private string ForgeVersion;
-        public string forgeVersion
+        public string profileName;
+
+        public bool isModsExternal
         {
-            set
-            {
-                ForgeVersion = value;
-            }
             get
             {
-                return mcVersion + "-" + ForgeVersion;
+                if (this.externalModsLink == "")
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+        public bool isForge
+        {
+            get
+            {
+                if(this.externalVerLink == "")
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
         }
     }
+
+
 }
