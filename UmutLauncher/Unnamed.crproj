@@ -1,0 +1,16 @@
+<project outputDir="E:\Scripts\C#\UmutLauncher\UmutLauncher\bin\Debug\Confused" baseDir="E:\Scripts\C#\UmutLauncher\UmutLauncher\bin\Debug" xmlns="http://confuser.codeplex.com">
+  <rule pattern="true" preset="maximum" inherit="false">
+    <protection id="anti ildasm" />
+    <protection id="anti tamper" />
+    <protection id="rename" />
+    <protection id="ctrl flow" />
+    <protection id="resources" />
+    <protection id="anti dump" />
+    <protection id="constants" />
+    <protection id="anti debug" />
+    <protection id="invalid metadata" />
+    <protection id="ref proxy" />
+  </rule>
+  <module path="Updater.exe" />
+  <module path="UmutLauncher.exe" />
+</project>

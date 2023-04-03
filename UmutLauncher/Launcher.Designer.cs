@@ -54,11 +54,9 @@ namespace UmutLauncher
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.chromiumWebBrowser1 = new CefSharp.WinForms.ChromiumWebBrowser();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel13 = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.label5 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.panel6 = new System.Windows.Forms.Panel();
             this.panel7 = new System.Windows.Forms.Panel();
@@ -75,7 +73,6 @@ namespace UmutLauncher
             this.panel10.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel8.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel6.SuspendLayout();
@@ -108,7 +105,6 @@ namespace UmutLauncher
             this.panel1.Padding = new System.Windows.Forms.Padding(10);
             this.panel1.Size = new System.Drawing.Size(960, 70);
             this.panel1.TabIndex = 6;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // label4
             // 
@@ -121,7 +117,6 @@ namespace UmutLauncher
             this.label4.Size = new System.Drawing.Size(13, 13);
             this.label4.TabIndex = 1;
             this.label4.Text = "  ";
-            this.label4.Click += new System.EventHandler(this.label4_Click_1);
             // 
             // progressBar1
             // 
@@ -294,13 +289,11 @@ namespace UmutLauncher
             // 
             this.panel4.BackColor = System.Drawing.Color.Black;
             this.panel4.Controls.Add(this.chromiumWebBrowser1);
-            this.panel4.Controls.Add(this.pictureBox1);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(10, 0);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(736, 485);
             this.panel4.TabIndex = 11;
-            this.panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.panel4_Paint_1);
             // 
             // chromiumWebBrowser1
             // 
@@ -309,17 +302,7 @@ namespace UmutLauncher
             this.chromiumWebBrowser1.Location = new System.Drawing.Point(0, 0);
             this.chromiumWebBrowser1.Name = "chromiumWebBrowser1";
             this.chromiumWebBrowser1.Size = new System.Drawing.Size(736, 485);
-            this.chromiumWebBrowser1.TabIndex = 1;
-            this.chromiumWebBrowser1.LoadingStateChanged += new System.EventHandler<CefSharp.LoadingStateChangedEventArgs>(this.chromiumWebBrowser1_LoadingStateChanged);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(736, 485);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.chromiumWebBrowser1.TabIndex = 0;
             // 
             // panel13
             // 
@@ -341,12 +324,10 @@ namespace UmutLauncher
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(214, 485);
             this.panel8.TabIndex = 8;
-            this.panel8.Paint += new System.Windows.Forms.PaintEventHandler(this.panel8_Paint);
             // 
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.panel5.Controls.Add(this.label5);
             this.panel5.Controls.Add(this.button2);
             this.panel5.Controls.Add(this.panel6);
             this.panel5.Controls.Add(this.button1);
@@ -359,22 +340,12 @@ namespace UmutLauncher
             this.panel5.Size = new System.Drawing.Size(214, 78);
             this.panel5.TabIndex = 0;
             // 
-            // label5
-            // 
-            this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.label5.Image = global::UmutLauncher.Properties.resources.interaction_social_media_discord_communication_chat_icon_230306;
-            this.label5.Location = new System.Drawing.Point(142, 11);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(60, 57);
-            this.label5.TabIndex = 1;
-            this.label5.Click += new System.EventHandler(this.discordJoin);
-            // 
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.button2.Dock = System.Windows.Forms.DockStyle.Left;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button2.Image = global::UmutLauncher.Properties.resources.interaction_social_media_discord_communication_chat_icon_230306;
             this.button2.Location = new System.Drawing.Point(146, 10);
             this.button2.Margin = new System.Windows.Forms.Padding(10, 0, 10, 10);
             this.button2.Name = "button2";
@@ -430,6 +401,7 @@ namespace UmutLauncher
             this.ButtonPlay.Location = new System.Drawing.Point(10, 10);
             this.ButtonPlay.Margin = new System.Windows.Forms.Padding(10, 0, 10, 10);
             this.ButtonPlay.Name = "ButtonPlay";
+            this.ButtonPlay.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
             this.ButtonPlay.Size = new System.Drawing.Size(58, 58);
             this.ButtonPlay.TabIndex = 9;
             this.ButtonPlay.UseVisualStyleBackColor = false;
@@ -530,7 +502,6 @@ namespace UmutLauncher
             this.panel10.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel8.ResumeLayout(false);
             this.panel8.PerformLayout();
             this.panel5.ResumeLayout(false);
@@ -569,13 +540,11 @@ namespace UmutLauncher
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel9;
         private System.Windows.Forms.Button ButtonPlay;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Panel panel13;
         private System.Windows.Forms.Label label4;
-        private PictureBox pictureBox1;
-        private CefSharp.WinForms.ChromiumWebBrowser chromiumWebBrowser1;
         private Panel panel12;
+        private CefSharp.WinForms.ChromiumWebBrowser chromiumWebBrowser1;
     }
 
 }

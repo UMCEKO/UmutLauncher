@@ -66,6 +66,7 @@ namespace UmutLauncher
             this.playerNameBox.Name = "playerNameBox";
             this.playerNameBox.Size = new System.Drawing.Size(297, 20);
             this.playerNameBox.TabIndex = 1;
+            this.playerNameBox.TextChanged += new System.EventHandler(this.playerNameBox_TextChanged);
             // 
             // javaPathBox
             // 

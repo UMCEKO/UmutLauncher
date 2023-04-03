@@ -73,7 +73,7 @@ namespace UmutLauncher
 
         private void SaveButt(object sender, EventArgs e)
         {
-            if (savefunc())
+            if (Minecrafto.isValidJVM(JavaArgBox.Text))
             {
                 form1.Invoke(new Action(() => {
                     form1.Show();
@@ -143,7 +143,6 @@ namespace UmutLauncher
                     form1.Show();
                 }));
             }
-            
         }
         private bool savefunc()
         {
@@ -159,8 +158,19 @@ namespace UmutLauncher
                     new string[] {"fullscreen", checkBox2.Checked.ToString()},
                     new string[] {"KCPass", KCPassBox.Text},
                 };
-                var newXmlDoc = Minecrafto.constructConfigPairs(configPairs, "config");
-                newXmlDoc.Save(@"Config.xml");
+                var newXmlDoc = new XmlDocument();
+                try
+                {
+                    newXmlDoc.Load("Config.xml");
+                    newXmlDoc = Minecrafto.constructConfigPairs(configPairs, newXmlDoc);
+                    Console.WriteLine("Did not catch exception in loading config");
+                }
+                catch
+                {
+                    Console.WriteLine("Caught exception in loading config");
+                    newXmlDoc = Minecrafto.constructConfigPairs(configPairs);
+                }
+                newXmlDoc.Save("Config.xml");
                 return true;
             }
             return false;
@@ -171,7 +181,7 @@ namespace UmutLauncher
             var procStartInf = new ProcessStartInfo
             {
                 FileName="explorer.exe",
-                Arguments=Directory.GetCurrentDirectory() + "\\instances"
+                Arguments=Directory.GetCurrentDirectory() + "\\minecraft"
             };
             Process.Start(procStartInf);
         }
@@ -218,6 +228,11 @@ namespace UmutLauncher
         }
 
         private void javaPathBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void playerNameBox_TextChanged(object sender, EventArgs e)
         {
 
         }

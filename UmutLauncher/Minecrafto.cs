@@ -29,21 +29,28 @@ namespace UmutLauncher
             }
         }
 
-        public static void mcRun(LaunchInformation InfoL, XmlDocument configXML, Launcher form)
+        public async static void mcRun(XmlDocument configXML, Launcher form)
         {
             form.Invoke(new Action(() => form.UpdateProgressBar(0)));
             var session = MSession.GetOfflineSession(configXML.SelectSingleNode("//name").InnerText);
-            var MCPath = new MinecraftPath(@"instances/" + InfoL.selectedProfile + "/");
+            var MCPath = new MinecraftPath(@"minecraft/instances/" + LaunchInformation.selectedProfile + "/", @"minecraft/common/");
+            MCPath.Library = @"minecraft/common/libraries/";
+            MCPath.Resource = @"minecraft/common/resources/";
+            MCPath.Versions = @"minecraft/common/versions/";
+            MCPath.Runtime = @"minecraft/common/runtime/";
             var Launcher = new CMLauncher(MCPath);
+            
+
             MVersion McVersion;
-            if (InfoL.isForge)
+            if (LaunchInformation.isForge)
             {
-                McVersion = Launcher.GetVersion(InfoL.profileName);
+                McVersion = Launcher.GetVersion(LaunchInformation.versionName);
             }
             else
             {
-                McVersion = Launcher.GetVersion(InfoL.vanillaVersion);
+                McVersion = Launcher.GetVersion(LaunchInformation.vanillaVersion);
             }
+
             form.Invoke(new Action(() => form.UpdateProgressBar(20)));
             Launcher.FileChanged += (e) =>
             {
@@ -62,10 +69,10 @@ namespace UmutLauncher
                 FullScreen = bool.Parse(configXML.SelectSingleNode("//fullscreen").InnerText),
                 MinimumRamMb = Int32.Parse(configXML.SelectSingleNode("//minRam").InnerText),
                 MaximumRamMb = Int32.Parse(configXML.SelectSingleNode("//maxRam").InnerText),
-                ServerIp = InfoL.serverIP,
+                ServerIp = LaunchInformation.serverIP,
                 Session = session,
                 Path = MCPath,
-                StartVersion = McVersion
+                StartVersion = McVersion,
             };
             form.Invoke(new Action(() => form.UpdateProgressBar(60)));
             if (configXML.SelectSingleNode("//javaPath").InnerText == "")
@@ -86,31 +93,51 @@ namespace UmutLauncher
                     Console.WriteLine(JVMParsed[i]);
                 }
             }
+            form.Invoke(new Action(() => form.UpdateProgressBar(100)));
 
             
+            //Launcher.CheckAndDownload(McVersion);
+            form.Invoke(new Action(() => form.ChangeWindowState()));
+            
+            form.Invoke(new Action(() => form.ChangeLoadingBar()));
+            form.Invoke(new Action(() => form.isRunning = false));
             var inst = Launcher.CreateProcess(McVersion, Options, false);
-            form.Invoke(new Action(() => form.UpdateProgressBar(100)));
+            inst.StartInfo.UseShellExecute = false;
+            inst.StartInfo.RedirectStandardOutput = true;
+            inst.StartInfo.RedirectStandardError = true;
+            inst.OutputDataReceived += (sender, args) =>
+            {
+                if (!string.IsNullOrEmpty(args.Data))
+                {
+                    Console.WriteLine(args.Data);
+                }
+            };
+            inst.ErrorDataReceived += (sender, args) =>
+            {
+                if (!string.IsNullOrEmpty(args.Data))
+                {
+                    Console.WriteLine(args.Data);
+                }
+            };
             inst.Start();
+            inst.BeginOutputReadLine();
+            inst.BeginErrorReadLine();
 
-            //Launcher.Launch(McVersion.Id, Options);
-        }
+            inst.WaitForExit();
 
-        public static void addValue(string xmlPath, string elementName, string elementValue)
-        {
-            var xmldoc = new XmlDocument();
-            xmldoc.Load(xmlPath);
-            var newElement = xmldoc.CreateElement(elementName);
-            newElement.InnerText = elementValue;
-            xmldoc.DocumentElement.AppendChild(newElement);
-            xmldoc.Save(xmlPath);
-            return;
+            form.Invoke(new Action(() => form.ChangeWindowState()));
         }
 
 
-        public static void mcInstall(LaunchInformation InfoL , Launcher passedForm)
-        {
 
-            var MCPath = new MinecraftPath(@"instances/" + InfoL.selectedProfile + "/");
+
+        public async static void mcInstall(Launcher passedForm)
+        {
+            var MCPath = new MinecraftPath(@"minecraft/instances/" + LaunchInformation.selectedProfile + "/", @"minecraft/common/");
+            MCPath.Library = @"minecraft/common/libraries/";
+            MCPath.Resource = @"minecraft/common/resources/";
+            MCPath.Versions = @"minecraft/common/versions/";
+            MCPath.Runtime = @"minecraft/common/runtime/";
             var Launcher = new CMLauncher(MCPath);
             Launcher.FileChanged += (e) =>
             {
@@ -122,39 +149,57 @@ namespace UmutLauncher
                 Launcher myForm = new Launcher();
                 passedForm.Invoke(new Action(() => passedForm.UpdateProgressBar(e.ProgressPercentage)));
             };
-            var McVersion = Launcher.GetVersion(InfoL.vanillaVersion);
+            var McVersion = Launcher.GetVersion(LaunchInformation.vanillaVersion);
             Launcher.CheckAndDownload(McVersion);
-
-
-            string ZipDir = @"instances/zips/lmao.zip";
-            string TempDir = @"instances/temp";
-
-            //var ahk = new ProcessStartInfo();
-            //ahk.Arguments = 
-            //    ZipDir + " " + 
-            //    TempDir + " " + 
-            //    DestDir + " " + 
-            //    InfoL.isForge + " " + 
-            //    InfoL.forgeLink + " " + 
-            //    InfoL.isModsExternal + " " + 
-            //    InfoL.externalModsLink;
-            //ahk.FileName = "forgeInst.exe";
-            //Process process = Process.Start(ahk);
-            //process.WaitForExit();
-
-            if (InfoL.isForge)
+            Console.WriteLine(LaunchInformation.isModsExternal);
+            Console.WriteLine(LaunchInformation.isForge);
+            Console.WriteLine(LaunchInformation.externalModsLink);
+            Console.WriteLine(LaunchInformation.externalVerLink);
+            Console.WriteLine("a");
+            if (LaunchInformation.isForge)
             {
+
+                string ZipDir = @"minecraft/zips/lmao.zip";
+                string TempDir = @"minecraft/temp";
                 Directory.CreateDirectory(ZipDir + @"\..");
                 using (var client = new WebClient())
                 {
-                    client.DownloadFile(InfoL.externalVerLink, ZipDir);
+                    client.DownloadProgressChanged += (progress, what) =>
+                    {
+                        Console.WriteLine("a");
+                        Console.WriteLine(progress);
+                        Console.WriteLine(what);
+                    };
+                    client.DownloadFile(LaunchInformation.externalVerLink, ZipDir);
                 }
 
                 FastZip kek = new FastZip();
                 kek.ExtractZip(ZipDir, TempDir, null);
                 File.Delete(ZipDir);
-                FileSystem.CopyDirectory(TempDir, MCPath.BasePath , true);
-
+                FileSystem.CopyDirectory(TempDir, @"minecraft\common\" , true);
+                Directory.Delete(ZipDir + @"\..");
+                Directory.Delete(TempDir, true);
+                if (LaunchInformation.isModsExternal)
+                {
+                    ZipDir = @"minecraft/zips/mods.zip";
+                    TempDir = @"minecraft/temp";
+                    Directory.CreateDirectory(ZipDir + @"\..");
+                    using (var client = new WebClient())
+                    {
+                        client.DownloadProgressChanged += (progress, what) =>
+                        {
+                            Console.WriteLine("b");
+                            Console.WriteLine(progress);
+                            Console.WriteLine(what);
+                        };
+                        client.DownloadFile(LaunchInformation.externalVerLink, ZipDir);
+                    }
+                    kek.ExtractZip(ZipDir, TempDir, null);
+                    File.Delete(ZipDir);
+                    FileSystem.CopyDirectory(TempDir, @"minecraft\instances\" + LaunchInformation.selectedProfile, true);
+                    Directory.Delete(ZipDir + @"\..");
+                    Directory.Delete(TempDir, true);
+                }
             }
         }
 
@@ -218,33 +263,33 @@ namespace UmutLauncher
             return JavaArgs;
         }
 
-        public static XmlDocument constructConfigPairs(string[][] configPairs,string rootElementName)
-        {
-            var newXMLDoc = new XmlDocument();
-            newXMLDoc.CreateElement(rootElementName);
-            XmlNode root = newXMLDoc.CreateElement(rootElementName);
 
-            XmlNode childNode;
-            for (int i = 0; i < configPairs.Length; i++)
+        public static XmlDocument constructConfigPairs(string[][] configPairs, XmlDocument configFile = null)
+        {
+            
+            if(configFile == null)
             {
-                childNode = newXMLDoc.CreateElement(configPairs[i][0]);
-                childNode.InnerText = configPairs[i][1];
-                root.AppendChild(childNode);
+                var newXMLDoc = new XmlDocument();
+                newXMLDoc.CreateElement("config");
+                XmlNode root = newXMLDoc.CreateElement("config");
+
+                XmlNode childNode;
+                for (int i = 0; i < configPairs.Length; i++)
+                {
+                    childNode = newXMLDoc.CreateElement(configPairs[i][0]);
+                    childNode.InnerText = configPairs[i][1];
+                    root.AppendChild(childNode);
+                }
+                newXMLDoc.AppendChild(root);
+                return newXMLDoc;
             }
-
-            newXMLDoc.AppendChild(root);
-            return newXMLDoc;
-        }
-
-        private class Folders
-        {
-            public string Source { get; private set; }
-            public string Target { get; private set; }
-
-            public Folders(string source, string target)
+            else
             {
-                Source = source;
-                Target = target;
+                for (int i = 0; i < configPairs.Length; i++)
+                {
+                    configFile.SelectSingleNode("config/" + configPairs[i][0]).InnerText = configPairs[i][1];
+                }
+                return configFile;
             }
         }
 
@@ -252,20 +297,21 @@ namespace UmutLauncher
     }
 
 
-    public class LaunchInformation
+    public static class LaunchInformation
     {
-        public string selectedProfile = "null";
-        public string vanillaVersion = "1.16.5";
-        public string externalModsLink; 
-        public string externalVerLink;
-        public string serverIP;
-        public string profileName;
+        public static string selectedProfile = "null";
+        public static string vanillaVersion = "1.16.5";
+        public static string externalModsLink; 
+        public static string externalVerLink;
+        public static string serverIP;
+        public static string versionName;
+        public static string XMLProfile;
 
-        public bool isModsExternal
+        public static bool isModsExternal
         {
             get
             {
-                if (this.externalModsLink == "")
+                if (LaunchInformation.externalModsLink == "")
                 {
                     return false;
                 }
@@ -275,20 +321,29 @@ namespace UmutLauncher
                 }
             }
         }
-        public bool isForge
+        public static bool isForge
         {
             get
             {
-                if(this.externalVerLink == "")
+                if(LaunchInformation.externalVerLink == "")
                 {
                     return false;
                 }
                 else
                 {
                     return true;
+
                 }
             }
         }
+    }
+
+
+    public static class KullaniciBilgi
+    {
+        public static string ad = "hgfshjg";
+
+
     }
 
 
