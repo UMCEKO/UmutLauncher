@@ -130,7 +130,21 @@ namespace UmutLauncher
 
         }
 
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                const int WS_CAPTION = 0x00C00000;
 
+                CreateParams baseParams = base.CreateParams;
+
+                //Get rid of caption
+
+                baseParams.Style = baseParams.Style & ~WS_CAPTION;
+
+                return baseParams;
+            }
+        }
 
         public void ChangeLoadingBar()
         {
@@ -342,7 +356,9 @@ namespace UmutLauncher
             }
         }
 
+        private void label1_Click(object sender, EventArgs e)
+        {
 
-
+        }
     }
 }
